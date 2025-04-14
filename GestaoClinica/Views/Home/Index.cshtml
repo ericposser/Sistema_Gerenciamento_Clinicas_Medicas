@@ -1,0 +1,194 @@
+﻿@{
+    ViewData["Title"] = "Início";
+}
+
+<!-- FullCalendar -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/locales-all.global.min.js"></script>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-4">
+    <!-- Linha com Card + Gráfico -->
+    <div class="row justify-content-center align-items-center mb-4">
+
+        <!-- Calendário -->
+        <div id="calendario" class="mb-5"></div>
+        
+        <!-- Card Faturamento -->
+        <div class="row align-items-stretch mb-4">
+            <div class="row g-3 mb-4">
+                <div class="row g-2 mb-4">
+                    <!-- Card de Faturamento Total (menor) -->
+                    <div class="row g-2 mb-4">
+                        <!-- Card de Faturamento Total -->
+                        <div class="row g-2 mb-4">
+                            <!-- Card Faturamento Total (altura igual ao gráfico) -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-body p-4" style="height: 360px;">
+                                            <h5 class="card-title text-primary fw-semibold mb-3">Faturamento por Mês</h5>
+                                            <div style="height: 280px;">
+                                                <canvas id="graficoFaturamentoMes" style="width: 100%; height: 100%; display: block;"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico -->
+        <div class="col-md-8">
+            <canvas id="graficoFaturamento" height="150"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/Home/FaturamentoPorMes')
+                .then(response => response.json())
+                .then(data => {
+                    const labels = data.map(item => item.mesNome); // ← agora com nome completo
+                    const valores = data.map(item => item.valor);
+
+                    const ctx = document.getElementById('graficoFaturamentoMes').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Faturamento (R$)',
+                                data: valores,
+                                backgroundColor: '#0d6efd'
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    max: 10000,
+                                    ticks: {
+                                        stepSize: 1000,
+                                        color: '#000',
+                                        font: { size: 11 }
+                                    },
+                                    grid: {
+                                        color: '#eee'
+                                    }
+                                },
+                                y: {
+                                    ticks: {
+                                        color: '#000',
+                                        font: { size: 11 },
+                                        autoSkip: false
+                                    },
+                                    grid: {
+                                        color: '#f5f5f5'
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            return 'R$ ' + context.raw.toLocaleString('pt-BR', {
+                                                minimumFractionDigits: 2
+                                            });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Erro ao carregar gráfico:", error);
+                });
+        });
+
+        // Calendário de consultas
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendario');
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'pt-br',
+                height: 500,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                buttonText: {
+                    today: 'Hoje',
+                    month: 'Mês',
+                    week: 'Semana',
+                    day: 'Dia',
+                    list: 'Lista'
+                },
+                events: '/Home/ConsultasJson'
+            });
+
+            calendar.render();
+        });
+    </script>
+}
+
+<!-- Estilo visual do calendário -->
+<style>
+    #calendario {
+        max-width: 100%;
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        margin: auto;
+    }
+
+    .fc .fc-toolbar-title {
+        font-weight: 600;
+        color: #0d6efd;
+    }
+
+    .fc .fc-button {
+        background-color: #0d6efd !important;
+        border: none;
+        font-weight: bold;
+        color: white;
+    }
+
+    .fc .fc-button:hover {
+        background-color: #084298 !important;
+    }
+
+    .fc-event {
+        background-color: #0d6efd !important;
+        border: 1px solid #084298;
+        color: white;
+        font-size: 0.85rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+
+    .fc-daygrid-day-frame {
+        background-color: #f0f4ff;
+    }
+
+    .fc-day-today {
+        background-color: #cfe2ff !important;
+    }
+</style>

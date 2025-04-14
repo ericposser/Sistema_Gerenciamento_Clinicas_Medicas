@@ -1,0 +1,58 @@
+@model IEnumerable<GestaoClinica.Models.Consulta>
+
+@{
+    ViewData["Title"] = "Consultas";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Consultas</h2>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Nova Consulta
+    </a>
+</div>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="date" name="dataBusca" value="@ViewData["DataBusca"]" class="form-control" />
+    </div>
+    <div class="col-md-auto">
+        <button type="submit" class="btn btn-outline-primary">
+            <i class="bi bi-search"></i> Buscar por data
+        </button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle shadow-sm bg-white rounded">
+        <thead class="table-light">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().DataHora)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Observacoes)</th>
+            <th>@Html.DisplayNameFor(model => model.First().ValorConsulta)</th>
+            <th>@Html.DisplayNameFor(model => model.First().PacienteId)</th>
+            <th>@Html.DisplayNameFor(model => model.First().MedicoId)</th>
+            <th class="text-center" style="width: 150px;">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DataHora.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.Observacoes</td>
+                <td>R$ @item.ValorConsulta.ToString("N2")</td>
+                <td>@item.Paciente?.Nome</td>
+                <td>@item.Medico?.Nome</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning me-1" title="Editar">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger" title="Excluir">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

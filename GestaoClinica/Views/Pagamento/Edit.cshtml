@@ -1,0 +1,80 @@
+@model GestaoClinica.Models.Pagamento
+
+@{
+    ViewData["Title"] = "Editar Pagamento";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body">
+                    <h4 class="card-title text-center fw-bold mb-4">Editar Pagamento</h4>
+
+                    <form asp-action="Edit" novalidate>
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="ValorPago" class="form-label fw-semibold"></label>
+                            <input asp-for="ValorPago" class="form-control" id="valorPago" placeholder="Ex: 120,00" />
+                            <span asp-validation-for="ValorPago" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DataPagamento" class="form-label fw-semibold"></label>
+                            <input asp-for="DataPagamento" class="form-control" type="date" />
+                            <span asp-validation-for="DataPagamento" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MetodoPagamento" class="form-label fw-semibold"></label>
+                            <input asp-for="MetodoPagamento" class="form-control" placeholder="Pix, Dinheiro, etc." />
+                            <span asp-validation-for="MetodoPagamento" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ConsultaId" class="form-label fw-semibold">Consulta / Paciente</label>
+                            <select asp-for="ConsultaId" class="form-select" asp-items="ViewBag.ConsultaId">
+                                <option value="">Selecione uma consulta</option>
+                            </select>
+                            <span asp-validation-for="ConsultaId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save"></i> Salvar Alterações
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <a asp-action="Index" class="text-decoration-none">
+                                <i class="bi bi-arrow-left"></i> Voltar à lista
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/imask"></script>
+    <script>
+        const valorInput = document.getElementById('valorPago');
+
+        if (valorInput) {
+            IMask(valorInput, {
+                mask: Number,
+                scale: 2,
+                signed: false,
+                thousandsSeparator: '.',
+                padFractionalZeros: true,
+                normalizeZeros: true,
+                radix: ',',
+                mapToRadix: ['.']
+            });
+        }
+    </script>
+}

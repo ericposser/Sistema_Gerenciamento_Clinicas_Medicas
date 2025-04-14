@@ -1,0 +1,210 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - GestaoClinicas</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/GestaoClinica.styles.css" asp-append-version="true"/>
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Select2 com Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        main {
+            margin-left: 16.666667%;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background-color: #212529;
+            color: white;
+        }
+
+        .sidebar .nav-link {
+            color: #ccc;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 0.5rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: transparent;
+            color: #e2e6ea; /* branco acinzentado suave */
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 8px;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1rem;
+            border-top: 1px solid #444;
+        }
+
+        .sidebar-footer img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container-fluid {
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 16.66666667%; /* equivalente a col-md-2 */
+            background-color: #212529;
+            color: white;
+            padding-top: 1rem;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar .nav-link {
+            color: #ccc;
+        }
+
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 0.5rem;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: transparent;
+            color: #e2e6ea;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 8px;
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1rem;
+            border-top: 1px solid #444;
+        }
+
+        .sidebar-footer img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<body>
+<script>
+    $(document).ready(function () {
+        var mensagem = '@TempData["Mensagem"]';
+        var tipo = '@TempData["TipoMensagem"]';
+
+        if (mensagem && tipo) {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "timeOut": "4000"
+            };
+
+            toastr[tipo](mensagem);
+        }
+    });
+</script>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-md-block sidebar px-3 py-4">
+            <div class="d-flex align-items-center mb-4">
+                <span class="fs-5 fw-bold">Gestão para Clínicas</span>
+            </div>
+
+            <hr class="text-secondary"/>
+
+            <ul class="nav flex-column mb-auto">
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door-fill"></i> Início
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Paciente" ? "active" : "")" asp-controller="Paciente" asp-action="Index">
+                        <i class="bi bi-people-fill"></i> Pacientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Medico" ? "active" : "")" asp-controller="Medico" asp-action="Index">
+                        <i class="bi bi-person-badge-fill"></i> Médicos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Consulta" ? "active" : "")" asp-controller="Consulta" asp-action="Index">
+                        <i class="bi bi-calendar-check-fill"></i> Consultas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Pagamento" ? "active" : "")" asp-controller="Pagamento" asp-action="Index">
+                        <i class="bi bi-cash-coin"></i> Pagamentos
+                    </a>
+                </li>
+            </ul>
+
+
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-md-4 py-4">
+            @RenderBody()
+        </main>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/imask"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

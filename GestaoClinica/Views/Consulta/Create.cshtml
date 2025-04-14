@@ -1,0 +1,101 @@
+@model GestaoClinica.Models.Consulta
+
+@{
+    ViewData["Title"] = "Nova Consulta";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-4 text-center fw-bold">Cadastro de Consulta</h4>
+
+                    <form asp-action="Create" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="DataHora" class="form-label fw-semibold"></label>
+                            <input asp-for="DataHora" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="DataHora" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Observacoes" class="form-label fw-semibold"></label>
+                            <input asp-for="Observacoes" class="form-control" placeholder="Ex: sintomas, observações clínicas..." />
+                            <span asp-validation-for="Observacoes" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ValorConsulta" class="form-label fw-semibold"></label>
+                            <input asp-for="ValorConsulta" class="form-control" id="valorConsulta" placeholder="Ex: 250,00" />
+                            <span asp-validation-for="ValorConsulta" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="PacienteId" class="form-label">Nome do Paciente</label>
+                            <select asp-for="PacienteId" class="form-select select2" asp-items="ViewBag.PacienteId">
+                                <option value="">Selecione...</option>
+                            </select>
+                            <span asp-validation-for="PacienteId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="MedicoId" class="form-label">Nome do Médico</label>
+                            <select asp-for="MedicoId" class="form-select select2" asp-items="ViewBag.MedicoId">
+                                <option value="">Selecione...</option>
+                            </select>
+                            <span asp-validation-for="MedicoId" class="text-danger"></span>
+                        </div>
+
+                        <br>
+                        
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-lg"></i> Salvar Consulta
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <a asp-action="Index" class="text-decoration-none">
+                                <i class="bi bi-arrow-left"></i> Voltar à lista
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.select2').select2({
+                theme: 'bootstrap-5',         // aplica o tema Bootstrap
+                width: '100%',                // ocupa toda a largura do form
+                placeholder: "Selecione...",
+                allowClear: true,
+                language: "pt-BR"             // opcional
+            });
+        });
+    </script>
+    
+    <script src="https://unpkg.com/imask"></script>
+    <script>
+        var valorInput = document.getElementById('valorConsulta');
+
+        if (valorInput) {
+            IMask(valorInput, {
+                mask: Number,
+                scale: 2,
+                signed: false,
+                thousandsSeparator: '.',
+                padFractionalZeros: true,
+                normalizeZeros: true,
+                radix: ',',
+                mapToRadix: ['.']
+            });
+        }
+    </script>
+}

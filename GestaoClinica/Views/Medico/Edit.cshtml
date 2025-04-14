@@ -1,0 +1,64 @@
+@model GestaoClinica.Models.Medico
+
+@{
+    ViewData["Title"] = "Editar Médico";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body">
+                    <h4 class="card-title text-center fw-bold mb-4">Editar Médico</h4>
+
+                    <form asp-action="Edit" novalidate>
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Nome" class="form-label fw-semibold"></label>
+                            <input asp-for="Nome" class="form-control" placeholder="Nome completo" />
+                            <span asp-validation-for="Nome" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CRM" class="form-label fw-semibold"></label>
+                            <input asp-for="CRM" class="form-control" placeholder="Número do CRM" />
+                            <span asp-validation-for="CRM" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Telefone" class="form-label fw-semibold"></label>
+                            <input asp-for="Telefone" class="form-control" id="telefone" placeholder="Ex: (00) 00000-0000" />
+                            <span asp-validation-for="Telefone" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-lg"></i> Salvar Alterações
+                            </button>
+                        </div>
+
+                        <div class="text-center">
+                            <a asp-action="Index" class="text-decoration-none">
+                                <i class="bi bi-arrow-left"></i> Voltar à lista
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/imask"></script>
+    <script>
+        var telefoneElement = document.getElementById('telefone');
+        if (telefoneElement) {
+            IMask(telefoneElement, {
+                mask: '(00) 00000-0000'
+            });
+        }
+    </script>
+}
