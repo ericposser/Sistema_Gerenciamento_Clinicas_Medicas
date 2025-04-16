@@ -1,0 +1,48 @@
+# Build
+bin/
+obj/
+
+# Rider (JetBrains)
+.idea/
+*.sln.iml
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Publish
+wwwroot/dist/
+wwwroot/node_modules/
+
+# Node (caso use para frontend)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# VS Code (caso use em paralelo)
+.vscode/
+
+# Environment config
+appsettings.Development.json
+secrets.json
+
+# Others
+*.sqlite
+*.sqlite3
